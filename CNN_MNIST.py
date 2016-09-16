@@ -10,34 +10,33 @@ from keras.utils import np_utils
 
 # input image dimensions
 n_rows, n_cols = 28, 28
-
 batch_size = 100 # Number of images used in each optimization step
 n_classes = 10 # One class per digit
 n_epoch = 20 # Number of times the whole data is used to learn
 
-# Read the train and test datasets
+# read the train and test datasets
 train = pd.read_csv("train.csv").values
 test  = pd.read_csv("test.csv").values
 
 # Reshape the data to be used by a Theano CNN. Shape is
 # (nb_of_samples, nb_of_color_channels, img_width, img_heigh)
+# grayscale image, so only one color channel
 X_train = train[:, 1:].reshape(train.shape[0], 1, n_rows, n_cols)
 X_test = test.reshape(test.shape[0], 1, n_rows, n_cols)
 y_train = train[:, 0] # extract labels
 
-# normalize to 1
+# normalize to 1 (orginal images are grayscale)
 X_train = X_train.astype('float32')
 X_test = X_test.astype('float32')
 X_train /= 255.0
 X_test /= 255.0
 
-# convert class vectors to one hot vectors
+# convert class vectors to one hot vectors, the NN has 10 output nodes, one for each digit
 Y_train = np_utils.to_categorical(y_train, n_classes)
 
 ###########
 model = Sequential()
-#use relu, is faster than other activation functions
-# generate  24 krnels for 5X5 filters, which are moved across the 1x28x28 image, 1 is the color axis
+# generate  24 kernels for 5X5 filters, which are moved across the 1x28x28 image, 1 is the color axis
 # use default stride = 1
 # no zero padding = border vaild
 model.add(Convolution2D(24, 5, 5, border_mode='valid',input_shape=(1, n_rows, n_cols)))
@@ -45,7 +44,7 @@ model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))	#reduced resolution with a 2x2 filter
 model.add(Dropout(0.15))
 
-# three layers of normal NN
+# three layers of normal NN, with 40, 40 and 10 nodes respectively
 model.add(Flatten()) # flatten: converts 3D array to 1D vector for oridnary NN
 model.add(Dense(40))
 model.add(Activation('relu'))
@@ -61,13 +60,13 @@ model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=["a
 
 
 # learning
-#model.load_weights('CNN_weights.txt')
+# model.load_weights('CNN_weights.txt')
 model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=n_epoch, verbose=1)
 model.save_weights('CNN_weights.txt')
 
-# Predict the label for X_test
+# predict the label for X_test
 yPred = model.predict_classes(X_test)
 
-# Save prediction in file for Kaggle submission
+# save prediction in file for Kaggle submission
 np.savetxt('mnist-pred.csv', np.c_[range(1,len(yPred)+1),yPred], delimiter=',', header = 'ImageId,Label', comments = '', fmt='%d')
-#achieves >98% accuracy
+# Achieves >98% accuracy in the test set, only slighly lesss than in the training set (98.9%)
