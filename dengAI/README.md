@@ -1,4 +1,4 @@
-This script is trying to model and predict dengue outbreaks in San Juan, using weather data of records of previous outbreaks. The data was provided by https://www.drivendata.org/competitions/44/dengai-predicting-disease-spread/
+This script is trying to model and predict dengue outbreaks in San Juan, using weather data and records of previous outbreaks. The data was provided by https://www.drivendata.org/competitions/44/dengai-predicting-disease-spread/
 
 
 loadData.py
