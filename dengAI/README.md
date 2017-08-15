@@ -13,5 +13,5 @@ a NN with one fully connected layer. accuracy is estimated by comparing its pred
 
 main.jpynb  
 
-main script. used for refining the parameters of NN_Dense1 and produces final figures. currently it predicts the number of expected dengue cases four weeks in advance. For another prediction windows simply adjust the parameter "nForecast". 
+main script. used for refining the parameters of NN_Dense1 and produces final figures. currently it predicts the number of expected dengue cases four weeks in advance. For other prediction windows simply adjust the parameter "nForecast". 
 
