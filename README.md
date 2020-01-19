@@ -1,6 +1,6 @@
 # machine learning
 
-This folder contains several smaller ML models.
+This folder contains several ML hello world tasks
 
 Description of files:
 - CNN_MIST.py : classical example of recognizing the MNIST figure set using a simple CNN and Keras 
